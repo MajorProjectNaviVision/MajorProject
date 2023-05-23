@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Upload</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #333333;
+        text-align: center;
+        margin-top: 0;
+      }
+
+      form {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 400px;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .file-input-label {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .file-input-label:hover {
+        background-color: #45a049;
+      }
+
+      .file-input-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .file-input-wrapper input[type="file"] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+      }
+
+      h2 {
+        color: #333333;
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+        margin-top: 10px;
+      }
+
+      .img-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      #selected-file {
+        margin-top: 10px;
+        color: #333333;
+        font-style: italic;
+      }
+    </style>
+    <script>
+      function displayFilename() {
+        const fileInput = document.getElementById("image-upload");
+        const selectedFile = document.getElementById("selected-file");
+
+        if (fileInput.files.length > 0) {
+          selectedFile.textContent = "Selected File: " + fileInput.files[0].name;
+        } else {
+          selectedFile.textContent = "";
+        }
+      }
+      function photo() {
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        sleep(3000);
+
+        // Create a new image element
+        var image = document.createElement("img");
+
+        // Set the source and alt attributes of the image
+        image.src = "../static/images/image.jpg";
+        image.alt = "Image with Bounding boxes";
+
+        // Get the container element
+        var container = document.getElementById("image-container");
+
+        // Append the image element to the container
+        container.appendChild(image);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Image Upload Form</h1>
+
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+      <div class="file-input-wrapper">
+        <label class="file-input-label" for="image-upload">Choose File</label>
+        <input id="image-upload" type="file" name="data" onchange="displayFilename()" />
+      </div>
+      <div id="selected-file"></div>
+      <br />
+      <input type="submit" value="Upload" />
+    </form>
+
+    {% if 'data' in request.files %}
+    <h2>Uploaded Image:</h2>
+    <div class="img-container">
+      <!-- <img src="{{ url_for('static', filename='uploaded_image.jpg') }}" alt="Uploaded Image" /> -->
+    </div>
+    {% endif %}
+  </body>
+</html>
